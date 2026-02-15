@@ -7,7 +7,6 @@
 
   var DATA_BASE = 'data/';
   var CSV_FILES = {
-    blogPosts: 'Luca - Blog Posts - 698941237cab858de65419ff.csv',
     tags: 'Luca - Tags - 698941237cab858de6541a63.csv',
     works: 'Luca - Works - 698941237cab858de6541a9b.csv',
     projects: 'Luca - Projects - 698941237cab858de6541a4d.csv'
@@ -109,12 +108,11 @@
   }
 
   /**
-   * Populate index.html: showcase (projects) and featured blog (blog posts).
+   * Populate index.html: showcase (projects) only.
    */
   function integrateIndex() {
     var showcaseList = document.querySelector('.section-home-showcase .showcase_list');
-    var blogListHome = document.querySelector('.section-home-blog .blog_list');
-    if (!showcaseList && !blogListHome) return;
+    if (!showcaseList) return;
 
     function renderShowcaseItem(project) {
       var name = project['Home page name'] || '';
@@ -141,105 +139,14 @@
       );
     }
 
-    function renderBlogItem(post) {
-      var title = post['Blog post title'] || '';
-      var slug = (post['Slug'] || getSlug(title)).trim();
-      var img = post['Main Image'] || '';
-      var href = 'detail_post.html?slug=' + encodeURIComponent(slug);
-      return (
-        '<div role="listitem" class="blog_item w-dyn-item">' +
-          '<a aria-label="blog post link" href="' + href + '" class="blog_link w-inline-block">' +
-            '<div class="padding-vertical padding-medium">' +
-              '<div class="blog_title-wrapper">' +
-                '<div class="max-width-custom1"><h3 class="heading-small">' + escapeHtml(title) + '</h3></div>' +
-                '<div class="blog_arrow-wrapper">' +
-                  '<div class="button-reveal"></div>' +
-                  '<div class="blog_arrow one w-embed"><svg width="20" height="12" viewbox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 5.525V7.225H7.57239V5.525H0Z" fill="currentColor"></path><path d="M8.66451 12L19.5 6.825V5.175L8.66451 0V1.925L14.0449 4.2C15.4398 4.8 16.8098 5.35 18.13 5.875V6.1C16.7849 6.65 15.39 7.2 14.0449 7.8L8.66451 10.075V12Z" fill="currentColor"></path></svg></div>' +
-                  '<div class="blog_arrow two w-embed"><svg width="20" height="12" viewbox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 5.525V7.225H7.57239V5.525H0Z" fill="#ffffff"></path><path d="M8.66451 12L19.5 6.825V5.175L8.66451 0V1.925L14.0449 4.2C15.4398 4.8 16.8098 5.35 18.13 5.875V6.1C16.7849 6.65 15.39 7.2 14.0449 7.8L8.66451 10.075V12Z" fill="#ffffff"></path></svg></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="track_component"><div class="track-line"></div><div class="track_progress horizontal"></div></div>' +
-            '<div class="blog_thumbnail hide-tablet">' +
-              '<div class="blog_image-wrapper"><img alt="" loading="lazy" src="' + img + '" class="blog_image"></div>' +
-            '</div>' +
-          '</a>' +
-        '</div>'
-      );
-    }
-
-    Promise.all([
-      document.querySelector('.section-home-showcase .showcase_list') ? loadCSV('projects') : [],
-      document.querySelector('.section-home-blog .blog_list') ? loadCSV('blogPosts') : []
-    ]).then(function (results) {
-      var projects = results[0] || [];
-      var posts = results[1] || [];
-      if (showcaseList && projects.length > 0) {
-        var template = showcaseList.querySelector('.showcase_item');
-        if (template) template.remove();
-        projects.forEach(function (p) {
-          if (p['Draft'] === 'true' || p['Archived'] === 'true') return;
-          showcaseList.insertAdjacentHTML('beforeend', renderShowcaseItem(p));
-        });
-        hideEmpty(showcaseList.closest('.showcase_list-wrapper'), !!projects.length);
-      }
-      if (blogListHome && posts.length > 0) {
-        var featured = posts.filter(function (p) {
-          return p['Featured on the home page?'] === 'true' && p['Draft'] !== 'true' && p['Archived'] !== 'true';
-        });
-        if (featured.length === 0) featured = posts.filter(function (p) { return p['Draft'] !== 'true' && p['Archived'] !== 'true'; });
-        var templateBlog = blogListHome.querySelector('.blog_item');
-        if (templateBlog) templateBlog.remove();
-        featured.slice(0, 3).forEach(function (p) {
-          blogListHome.insertAdjacentHTML('beforeend', renderBlogItem(p));
-        });
-        hideEmpty(blogListHome.closest('.blog_wrapper'), featured.length > 0);
-      }
-    }).catch(console.error);
-  }
-
-  /**
-   * Populate blog.html: full blog list from Blog Posts CSV.
-   */
-  function integrateBlogPage() {
-    var list = document.querySelector('.section-blog-blog .blog_list');
-    if (!list) return;
-
-    function renderItem(post) {
-      var title = post['Blog post title'] || '';
-      var slug = (post['Slug'] || getSlug(title)).trim();
-      var img = post['Main Image'] || '';
-      var href = 'detail_post.html?slug=' + encodeURIComponent(slug);
-      return (
-        '<div role="listitem" class="blog_item w-dyn-item">' +
-          '<a href="' + href + '" class="blog_link w-inline-block">' +
-            '<div class="padding-vertical padding-medium">' +
-              '<div class="blog_title-wrapper">' +
-                '<div class="max-width-custom1"><h3 class="heading-small">' + escapeHtml(title) + '</h3></div>' +
-                '<div class="blog_arrow-wrapper">' +
-                  '<div class="button-reveal"></div>' +
-                  '<div class="blog_arrow one w-embed"><svg width="20" height="12" viewbox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 5.525V7.225H7.57239V5.525H0Z" fill="currentColor"></path><path d="M8.66451 12L19.5 6.825V5.175L8.66451 0V1.925L14.0449 4.2C15.4398 4.8 16.8098 5.35 18.13 5.875V6.1C16.7849 6.65 15.39 7.2 14.0449 7.8L8.66451 10.075V12Z" fill="currentColor"></path></svg></div>' +
-                  '<div class="blog_arrow two w-embed"><svg width="20" height="12" viewbox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 5.525V7.225H7.57239V5.525H0Z" fill="#ffffff"></path><path d="M8.66451 12L19.5 6.825V5.175L8.66451 0V1.925L14.0449 4.2C15.4398 4.8 16.8098 5.35 18.13 5.875V6.1C16.7849 6.65 15.39 7.2 14.0449 7.8L8.66451 10.075V12Z" fill="#ffffff"></path></svg></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="track_component"><div class="track-line"></div><div class="track_progress horizontal"></div></div>' +
-            '<div class="blog_thumbnail hide-tablet">' +
-              '<div class="blog_image-wrapper"><img alt="" loading="lazy" src="' + img + '" class="blog_image"></div>' +
-            '</div>' +
-          '</a>' +
-        '</div>'
-      );
-    }
-
-    loadCSV('blogPosts').then(function (rows) {
-      var posts = (rows || []).filter(function (p) { return p['Draft'] !== 'true' && p['Archived'] !== 'true'; });
-      var template = list.querySelector('.blog_item');
+    loadCSV('projects').then(function (projects) {
+      var list = (projects || []).filter(function (p) { return p['Draft'] !== 'true' && p['Archived'] !== 'true'; });
+      var template = showcaseList.querySelector('.showcase_item');
       if (template) template.remove();
-      posts.forEach(function (p) {
-        list.insertAdjacentHTML('beforeend', renderItem(p));
+      list.forEach(function (p) {
+        showcaseList.insertAdjacentHTML('beforeend', renderShowcaseItem(p));
       });
-      hideEmpty(list.closest('.blog_wrapper'), !!posts.length);
+      hideEmpty(showcaseList.closest('.showcase_list-wrapper'), list.length > 0);
     }).catch(console.error);
   }
 
@@ -282,109 +189,6 @@
         list.insertAdjacentHTML('beforeend', renderItem(w));
       });
       hideEmpty(list.closest('.work_list-wrapper'), !!works.length);
-    }).catch(console.error);
-  }
-
-  /**
-   * Populate detail_post.html: single post by ?slug= and "You may also like".
-   */
-  function integrateDetailPost() {
-    var slug = getUrlSlug();
-    if (!slug) return;
-
-    var titleEl = document.querySelector('.section-article-header h1');
-    var mainImgEl = document.querySelector('.section-article-main-image .image-wrapper_image');
-    var bannerLink = document.querySelector('.section-article-banner .banner_component');
-    var bannerText = document.querySelector('.section-article-banner .is-banner-text');
-    var contentEl = document.querySelector('.section-article-content .text-rich-text');
-    var blogList = document.querySelector('.section-article-blog .blog_list');
-
-    function setMeta(title, description, image) {
-      document.title = (title || '') + ' | Luca Pignataro';
-      var desc = document.querySelector('meta[name="description"]');
-      if (desc) desc.setAttribute('content', description || '');
-      var ogTitle = document.querySelector('meta[property="og:title"]');
-      if (ogTitle) ogTitle.setAttribute('content', title || '');
-      var ogDesc = document.querySelector('meta[property="og:description"]');
-      if (ogDesc) ogDesc.setAttribute('content', description || '');
-      var ogImg = document.querySelector('meta[property="og:image"]');
-      if (ogImg) ogImg.setAttribute('content', image || '');
-      var twTitle = document.querySelector('meta[property="twitter:title"]');
-      if (twTitle) twTitle.setAttribute('content', title || '');
-      var twDesc = document.querySelector('meta[property="twitter:description"]');
-      if (twDesc) twDesc.setAttribute('content', description || '');
-      var twImg = document.querySelector('meta[property="twitter:image"]');
-      if (twImg) twImg.setAttribute('content', image || '');
-    }
-
-    function renderOtherPost(post) {
-      var title = post['Blog post title'] || '';
-      var postSlug = (post['Slug'] || getSlug(title)).trim();
-      var img = post['Main Image'] || '';
-      var href = 'detail_post.html?slug=' + encodeURIComponent(postSlug);
-      return (
-        '<div role="listitem" class="blog_item w-dyn-item">' +
-          '<a href="' + href + '" class="blog_link w-inline-block">' +
-            '<div class="padding-vertical padding-medium">' +
-              '<div class="blog_title-wrapper">' +
-                '<div class="max-width-custom1"><h3 class="heading-small">' + escapeHtml(title) + '</h3></div>' +
-                '<div class="blog_arrow-wrapper"><div class="button-reveal"></div><div class="blog_arrow one w-embed"><svg width="20" height="12" viewbox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 5.525V7.225H7.57239V5.525H0Z" fill="currentColor"></path><path d="M8.66451 12L19.5 6.825V5.175L8.66451 0V1.925L14.0449 4.2C15.4398 4.8 16.8098 5.35 18.13 5.875V6.1C16.7849 6.65 15.39 7.2 14.0449 7.8L8.66451 10.075V12Z" fill="currentColor"></path></svg></div><div class="blog_arrow two w-embed"><svg width="20" height="12" viewbox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 5.525V7.225H7.57239V5.525H0Z" fill="#ffffff"></path><path d="M8.66451 12L19.5 6.825V5.175L8.66451 0V1.925L14.0449 4.2C15.4398 4.8 16.8098 5.35 18.13 5.875V6.1C16.7849 6.65 15.39 7.2 14.0449 7.8L8.66451 10.075V12Z" fill="#ffffff"></path></svg></div></div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="track_component"><div class="track-line"></div><div class="track_progress horizontal"></div></div>' +
-            '<div class="blog_thumbnail hide-tablet">' +
-              '<div class="blog_image-wrapper"><img alt="" loading="lazy" src="' + img + '" class="blog_image"></div>' +
-            '</div>' +
-          '</a>' +
-        '</div>'
-      );
-    }
-
-    loadCSV('blogPosts').then(function (rows) {
-      var posts = rows || [];
-      var post = posts.find(function (p) {
-        var s = (p['Slug'] || getSlug(p['Blog post title'] || '')).trim();
-        return s === slug;
-      });
-      if (!post) {
-        if (titleEl) titleEl.textContent = 'Post not found';
-        return;
-      }
-      var title = post['Blog post title'] || '';
-      var article = post['Blog post article'] || '';
-      var mainImg = post['Main Image'] || '';
-      var alt = post['Main image alt text'] || title;
-      var bannerMsg = post['Banner Message'] || '';
-      var bannerUrl = post['Banner URL (external link)'] || '';
-      var seoTitle = post['SEO Title tag'] || title;
-      var seoDesc = post['SEO Meta Description'] || '';
-      var ogImage = post['Open Graph Image'] || mainImg;
-
-      if (titleEl) titleEl.textContent = title;
-      if (mainImgEl) {
-        mainImgEl.src = mainImg;
-        mainImgEl.alt = alt;
-      }
-      if (bannerLink) {
-        if (bannerUrl) bannerLink.href = bannerUrl;
-        else bannerLink.style.display = 'none';
-      }
-      if (bannerText) bannerText.textContent = bannerMsg;
-      if (contentEl) contentEl.innerHTML = article;
-      setMeta(seoTitle, seoDesc, ogImage);
-
-      if (blogList) {
-        var others = posts.filter(function (p) {
-          var s = (p['Slug'] || getSlug(p['Blog post title'] || '')).trim();
-          return s !== slug && p['Draft'] !== 'true' && p['Archived'] !== 'true';
-        }).slice(0, 3);
-        var tpl = blogList.querySelector('.blog_item');
-        if (tpl) tpl.remove();
-        others.forEach(function (p) {
-          blogList.insertAdjacentHTML('beforeend', renderOtherPost(p));
-        });
-        hideEmpty(blogList.closest('.blog_wrapper'), others.length > 0);
-      }
     }).catch(console.error);
   }
 
@@ -445,17 +249,11 @@
   }
 
   function run() {
-    if (document.querySelector('.section-home-showcase') || document.querySelector('.section-home-blog .blog_list')) {
+    if (document.querySelector('.section-home-showcase .showcase_list')) {
       integrateIndex();
-    }
-    if (document.querySelector('.section-blog-blog .blog_list')) {
-      integrateBlogPage();
     }
     if (document.querySelector('.section-work-work .work_list')) {
       integrateWorkPage();
-    }
-    if (document.querySelector('.section-article-header') && document.querySelector('.section-article-content')) {
-      integrateDetailPost();
     }
     var path = window.location.pathname || '';
     if (path.indexOf('detail_projects') !== -1 && getUrlSlug()) {

@@ -422,7 +422,7 @@ figure {
   align-items: stretch;
   width: 12rem;
   font-size: 1.25rem;
-  display: flex;
+  display: none;
   position: relative;
 }
 
@@ -1481,7 +1481,7 @@ figure {
   padding-bottom: .15rem;
   font-size: 1.25rem;
   line-height: 1.5;
-  display: block;
+  display: flex;
 }
 
 .div-hide {
@@ -2605,7 +2605,7 @@ figure {
   }
 
   .button-secondary {
-    display: flex;
+    display: none;
   }
 
   .margin-vertical {
