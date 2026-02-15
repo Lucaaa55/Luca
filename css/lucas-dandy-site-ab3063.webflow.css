@@ -422,7 +422,7 @@ figure {
   align-items: stretch;
   width: 12rem;
   font-size: 1.25rem;
-  display: none;
+  display: flex;
   position: relative;
 }
 
@@ -2605,7 +2605,7 @@ figure {
   }
 
   .button-secondary {
-    display: none;
+    display: flex;
   }
 
   .margin-vertical {
