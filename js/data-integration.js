@@ -101,10 +101,17 @@
    * Fetch and parse a CSV file. Returns Promise<Array<Object>>.
    */
   function loadCSV(key) {
-    var path = DATA_BASE + (CSV_FILES[key] || key);
+    var filename = CSV_FILES[key] || key;
+    var path = DATA_BASE + filename;
     return fetch(path)
-      .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('Failed to load ' + path)); })
-      .then(parseCSV);
+      .then(function (r) {
+        if (!r.ok) return Promise.reject(new Error('Failed to load ' + path));
+        return r.text();
+      })
+      .then(function (text) {
+        var rows = parseCSV(text || '');
+        return Array.isArray(rows) ? rows : [];
+      });
   }
 
   /**
@@ -140,13 +147,22 @@
     }
 
     loadCSV('projects').then(function (projects) {
-      var list = (projects || []).filter(function (p) { return p['Draft'] !== 'true' && p['Archived'] !== 'true'; });
+      var list = (projects || []).filter(function (p) {
+        return p['Draft'] !== 'true' && p['Archived'] !== 'true' && (p['Home page name'] || '').trim();
+      });
+      list.sort(function (a, b) {
+        var orderA = parseInt(a['Sort order'], 10);
+        var orderB = parseInt(b['Sort order'], 10);
+        if (!isNaN(orderA) && !isNaN(orderB)) return orderA - orderB;
+        return 0;
+      });
       var template = showcaseList.querySelector('.showcase_item');
       if (template) template.remove();
       list.forEach(function (p) {
         showcaseList.insertAdjacentHTML('beforeend', renderShowcaseItem(p));
       });
-      hideEmpty(showcaseList.closest('.showcase_list-wrapper'), list.length > 0);
+      var wrapper = showcaseList.closest('.showcase_list-wrapper');
+      if (wrapper) hideEmpty(wrapper, list.length > 0);
     }).catch(console.error);
   }
 
@@ -182,13 +198,16 @@
     }
 
     loadCSV('works').then(function (rows) {
-      var works = (rows || []).filter(function (w) { return w['Draft'] !== 'true' && w['Archived'] !== 'true'; });
+      var works = (rows || []).filter(function (w) {
+        return w['Draft'] !== 'true' && w['Archived'] !== 'true' && (w['Project name'] || '').trim();
+      });
       var template = list.querySelector('.work_item');
       if (template) template.remove();
       works.forEach(function (w) {
         list.insertAdjacentHTML('beforeend', renderItem(w));
       });
-      hideEmpty(list.closest('.work_list-wrapper'), !!works.length);
+      var wrapper = list.closest('.work_list-wrapper');
+      if (wrapper) hideEmpty(wrapper, works.length > 0);
     }).catch(console.error);
   }
 
@@ -231,8 +250,12 @@
         (mainImg ? '<div class="margin-top margin-large"><img src="' + mainImg + '" alt="' + escapeHtml(name) + '" loading="lazy" style="max-width:100%;"></div>' : '') +
         (liveUrl ? '<p class="margin-top margin-medium"><a href="' + escapeHtml(liveUrl) + '" target="_blank" rel="noopener" class="button w-inline-block"><span class="button-text">View project</span></a></p>' : '') +
         '</div></div></div>';
+      container.innerHTML = '';
       container.insertAdjacentHTML('afterbegin', html);
-    }).catch(console.error);
+    }).catch(function (err) {
+      console.error(err);
+      if (container) container.innerHTML = '<p>Unable to load project. <a href="work.html">Back to Work</a></p>';
+    });
   }
 
   function escapeHtml(s) {
@@ -249,16 +272,12 @@
   }
 
   function run() {
-    if (document.querySelector('.section-home-showcase .showcase_list')) {
-      integrateIndex();
-    }
-    if (document.querySelector('.section-work-work .work_list')) {
-      integrateWorkPage();
-    }
-    var path = window.location.pathname || '';
-    if (path.indexOf('detail_projects') !== -1 && getUrlSlug()) {
-      integrateDetailProject();
-    }
+    var path = (window.location.pathname || '').toLowerCase();
+    var slug = getUrlSlug();
+
+    if (document.querySelector('.section-home-showcase .showcase_list')) integrateIndex();
+    if (document.querySelector('.section-work-work .work_list')) integrateWorkPage();
+    if (path.indexOf('detail_projects') !== -1 && slug) integrateDetailProject();
   }
 
   if (document.readyState === 'loading') {
