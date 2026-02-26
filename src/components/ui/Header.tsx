@@ -1,17 +1,14 @@
 'use client'
 
-import Magnetic from '@/components/core/Magnetic'
-import { forwardRef } from 'react'
 import { HiOutlineMenuAlt4 } from 'react-icons/hi'
+import Pointer from '@/styles/pointer.module.css'
 
-export const Header = forwardRef<HTMLDivElement, { children: React.ReactNode }>(function index({ children }, ref) {
+export default function Header() {
     return (
-        <div className={'w-screen h-16 bg-white flex items-center justify-center p-4 mix-blend-difference bg-white'}>
-            <Magnetic>
-                <div ref={ref} className={'w-10 h-10 flex items-center justify-center rounded-full '} >
-                    <HiOutlineMenuAlt4 color={'black'} className={'bg-white mix-blend-difference'} />
-                </div>
-            </Magnetic>
+        <div className={'w-screen h-24 flex items-center justify-end absolute top-0 left-0 md:px-20 px-10'}>
+            <div className={`${Pointer.cursor} bg-black w-10 h-10 flex content-center items-center justify-center rounded-full hover:animate-rubberBand`} >
+                <HiOutlineMenuAlt4 color={'white'} size={20} />
+            </div>
         </div>
     )
-})
+}

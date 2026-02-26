@@ -1,6 +1,11 @@
 "use client"
 import { motion, useInView } from 'framer-motion';
+import localFont from 'next/font/local';
 import * as React from 'react';
+
+const latino = localFont({
+  src: '../../../public/fonts/Degular/Regular.otf',
+})
  
 export function WordsPullUp({
   text,
@@ -24,7 +29,7 @@ export function WordsPullUp({
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center overflow-y-hidden">
       {splittedText.map((current, i) => (
         <motion.div
           key={i}
@@ -34,12 +39,10 @@ export function WordsPullUp({
           animate={isInView ? 'animate' : ''}
           custom={i}
           className={
-            'text-xl text-center sm:text-4xl font-bold tracking-tighter md:text-6xl md:leading-[4rem]'+
-            'pr-2'+
-            className
+            `text-4xl text-center md:text-8xl pr-2 md:px-3 ${className}  overflow-y-hidden`
           }
         >
-          {current == '' ? <span>&nbsp;</span> : current}
+          {current == '' ? <span> </span> : current}
         </motion.div>
       ))}
     </div>

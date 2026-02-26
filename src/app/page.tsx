@@ -1,22 +1,33 @@
 'use client'
 
-import Draggable from '@/components/core/Draggable'
 import { WordsPullUp } from '@/components/core/Words'
+import Bananas from '@/components/ui/Scene'
+import Section from '@/components/ui/Section'
 import localFont from 'next/font/local'
-import Image from 'next/image'
 
-const latino = localFont({
-    src: '../../public/fonts/Latino/WdExBold.ttf',
+const degular = localFont({
+    src: '../../public/fonts/Degular/Regular.otf',
 })
 
 export default function Home() {
     return (
         <>
             <main className={`bg-white`}>
-                <div className={`flex flex-col items-center justify-center w-screen h-screen bg-white`}>
-                    <Draggable src={'/images/sponge.png'} size={200} />
-                    
-                </div>
+                <Section>
+                    <div className={'md:py-32 md:px-32 px-10 items-center md:items-start flex-col flex w-full py-28 justify-end h-full content-center'}>
+                        <div className={'w-full flex-1'}>
+                            <Bananas />
+                        </div>
+
+                        <div className={'w-full flex-1 flex flex-col items-start justify-center'}>
+                            <WordsPullUp className={degular.className} text={"Hey, I'm Luca -"} />
+                            <WordsPullUp className={degular.className} text={"Software developer"} />
+                        </div>
+                    </div>
+                </Section>
+                <Section>
+
+                </Section>
             </main>
         </>
     )
