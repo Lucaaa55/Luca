@@ -39,7 +39,7 @@ export function WordsPullUp({
           animate={isInView ? 'animate' : ''}
           custom={i}
           className={
-            `text-4xl text-center md:text-8xl pr-2 md:px-3 ${className}  overflow-y-hidden`
+            `pr-2 md:px-3 ${className} overflow-y-hidden`
           }
         >
           {current == '' ? <span> </span> : current}
