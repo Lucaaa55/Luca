@@ -19,8 +19,8 @@ function Banana({ index, z, speed }: { index: number, z: number, speed: number }
     })
 
     useFrame((state, dt) => {
-        if (dt < 0.1) ref.current.position.set(index === 0 ? 0 : data.x * width, (data.y += dt * speed), -z)
-            ref.current.rotation.set((data.rX += dt / data.spin), Math.sin(index * 1000 + state.clock.elapsedTime / 10) * Math.PI, (data.rZ += dt / data.spin))
+        if (dt < 0.1) ref.current!.position.set(index === 0 ? 0 : data.x * width, (data.y += dt * speed), -z)
+            ref.current!.rotation.set((data.rX += dt / data.spin), Math.sin(index * 1000 + state.clock.elapsedTime / 10) * Math.PI, (data.rZ += dt / data.spin))
         if (data.y > height * (index === 0 ? 4 : 1)) data.y = -(height * (index === 0 ? 4 : 1))
     })
 
@@ -33,7 +33,7 @@ function Banana({ index, z, speed }: { index: number, z: number, speed: number }
     )
 }
 
-export default function Bananas({ speed = 1, count = 100, depth = 80, easing = (x: number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
+export default function Bananas({ speed = 1, count = 500, depth = 80, easing = (x: number) => Math.sqrt(1 - Math.pow(x - 1, 2)) }) {
     return (
         <Canvas flat gl={{ antialias: false }} dpr={[1, 1.5]} camera={{ position: [0, 0, 10], fov: 20, near: 0.01, far: depth + 15 }}>
             <color attach={'background'} args={['#ffbf40']} />
