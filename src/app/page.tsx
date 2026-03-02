@@ -49,7 +49,7 @@ export default function Home() {
 
                             <TextFade direction={'up'}>
                                 <Underline className={`${text.className} ${Pointer.cursor} w-36`}>
-                                    <Link className={'md:text-lg'} href={'/about'}>Know me better</Link>
+                                    <Link className={`md:text-lg ${Pointer.cursor}`} href={'/about'}>Know me better</Link>
                                 </Underline>
                             </TextFade>
                         </div>
@@ -74,7 +74,7 @@ export default function Home() {
 
                     <Magnetic>
                         <Fill>
-                            <Link style={text.style} className={'hover:mix-blend-difference text-black'} href={'/projects'}>See more work</Link>
+                            <Link style={text.style} className={`hover:mix-blend-difference text-black ${Pointer.cursor}`} href={'/projects'}>See more work</Link>
                         </Fill>
                     </Magnetic>
                 </div>

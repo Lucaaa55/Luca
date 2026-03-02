@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import Pointer from '@/styles/pointer.module.css'
 
 export default function Magnetic({ children, className = '' }: { children: React.ReactNode, className?: string }) {
     const ref = useRef<HTMLDivElement>(null)
@@ -33,7 +34,7 @@ export default function Magnetic({ children, className = '' }: { children: React
 
     return (
         <motion.div
-            className={`overflow-hidden ${className}`}
+            className={`overflow-hidden ${Pointer.cursor} ${className}`}
             style={{ position: 'relative' }}
             ref={ref}
             onMouseMove={handleMouse}
