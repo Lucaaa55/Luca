@@ -61,7 +61,7 @@ export default function Home() {
                             {list.map((project) => (
                                 <div key={project.name} className={'flex flex-col items-center justify-center gap-7'}>
                                     <Link href={project.link}>
-                                        <Image className={'items-center justify-center rounded-xl w-full h-full aspect-auto md:w-72'} src={project.image} alt={project.name} width={500} height={300} />
+                                        <Image className={`items-center justify-center rounded-xl w-full h-full aspect-auto md:w-72 ${Pointer.cursor}`} src={project.image} alt={project.name} width={500} height={300} />
                                     </Link>
                                     <h1 style={degular.style} className={'text-3xl items-start justify-start flex overflow-y-hidden pb-5'}>{project.name}</h1>
                                     <p style={text.style} className={'text-lg md:text-xl md:w-3/5 text-start pt-5 h-36 overflow-y-hidden'}>{project.description}</p>
