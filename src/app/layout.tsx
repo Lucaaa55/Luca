@@ -3,9 +3,11 @@ import "@/styles/globals.css"
 import Header from "@/components/ui/Header";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Footer from "@/components/ui/Footer"
+
 export const metadata: Metadata = {
-  title: "Lucas's Portfolio",
-  description: "Lucas's web development portfolio",
+  title: "Luca Pignataro - Software developer",
+  description: "Luca Pignataro's web development portfolio",
 }
 
 export default function RootLayout({
@@ -20,6 +22,7 @@ export default function RootLayout({
       >
         <Header />
         {children}
+        <Footer />
         <Analytics />
         <SpeedInsights />
       </body>

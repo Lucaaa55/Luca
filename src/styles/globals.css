@@ -17,6 +17,18 @@ body {
     -ms-user-drag: none;
 }
 
+@layer utilities {
+    .clip-circle-none {
+        clip-path: circle(0% at 50% 0%);
+        background: #000000;
+    }
+
+    .clip-circle-full {
+        clip-path: circle(100% at 50% 0%);
+        background: #000000;
+    }
+}
+
 @theme {
     --animate-rubberBand: rubberBand 0.9s;
     --animate-spin: spin 8s infinite linear;

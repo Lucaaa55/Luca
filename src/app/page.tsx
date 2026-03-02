@@ -9,6 +9,8 @@ import Pointer from '@/styles/pointer.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import { list } from '@/constants/projects'
+import Fill from '@/components/core/Fill'
+import Magnetic from '@/components/core/Magnetic'
 
 const degular = localFont({
     src: '../../public/fonts/Degular/Regular.otf',
@@ -47,13 +49,13 @@ export default function Home() {
 
                             <TextFade direction={'up'}>
                                 <Underline className={`${text.className} ${Pointer.cursor} w-36`}>
-                                    <Link className={'md:text-lg'} href={'/me'}>Know me better</Link>
+                                    <Link className={'md:text-lg'} href={'/about'}>Know me better</Link>
                                 </Underline>
                             </TextFade>
                         </div>
                     </div>
                 </Section>
-                <div className={'mt-32'}>
+                <div className={'mt-32 overflow-hidden'}>
                     <h1 style={degular.style} className={'text-4xl md:text-6xl items-center justify-center flex pb-10'}>My projects</h1>
                     
                     <TextFade direction={'up'}>
@@ -64,11 +66,17 @@ export default function Home() {
                                         <Image className={`items-center justify-center rounded-xl w-full h-full aspect-auto md:w-72 ${Pointer.cursor}`} src={project.image} alt={project.name} width={500} height={300} />
                                     </Link>
                                     <h1 style={degular.style} className={'text-3xl items-start justify-start flex overflow-y-hidden pb-5'}>{project.name}</h1>
-                                    <p style={text.style} className={'text-lg md:text-xl md:w-3/5 text-start pt-5 h-36 overflow-y-hidden'}>{project.description}</p>
+                                    <p style={text.style} className={'text-lg md:text-xl md:w-2/5 text-start pt-5 h-36 overflow-y-hidden'}>{project.description}</p>
                                 </div>
                             ))}
                         </div>
                     </TextFade>
+
+                    <Magnetic>
+                        <Fill>
+                            <Link style={text.style} className={'hover:mix-blend-difference text-black'} href={'/projects'}>See more work</Link>
+                        </Fill>
+                    </Magnetic>
                 </div>
             </main>
         </>
