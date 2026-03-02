@@ -19,6 +19,7 @@ body {
 
 @theme {
     --animate-rubberBand: rubberBand 0.9s;
+    --animate-spin: spin 8s infinite linear;
 
     @keyframes rubberBand {
         0% {
@@ -41,6 +42,15 @@ body {
         }
         to {
             transform: scaleX(1);
+        }
+    }
+    
+    @keyframes spin {
+        from {
+            translate: 0;
+        }
+        to {
+            translate: -100%;
         }
     }
 }

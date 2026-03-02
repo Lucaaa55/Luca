@@ -1,12 +1,8 @@
 "use client"
+
 import { motion, useInView } from 'framer-motion';
-import localFont from 'next/font/local';
 import * as React from 'react';
 
-const latino = localFont({
-  src: '../../../public/fonts/Degular/Regular.otf',
-})
- 
 export function WordsPullUp({
   text,
   className = '',

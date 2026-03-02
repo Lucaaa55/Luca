@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css"
 import Header from "@/components/ui/Header";
-
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 export const metadata: Metadata = {
   title: "Lucas's Portfolio",
   description: "Lucas's web development portfolio",
@@ -19,6 +20,8 @@ export default function RootLayout({
       >
         <Header />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
