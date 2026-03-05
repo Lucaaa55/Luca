@@ -25,7 +25,7 @@ export default function Magnetic({ children, className = '' }: { children: React
 
     const reset = () => {
         setPosition({
-            x:0, 
+            x:0,
             y:0
         })
     }
