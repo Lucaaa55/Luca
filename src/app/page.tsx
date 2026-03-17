@@ -8,7 +8,7 @@ import localFont from 'next/font/local'
 import Pointer from '@/styles/pointer.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
-import { list } from '@/constants/projects'
+import { list } from '@/constants/words'
 import Fill from '@/components/core/Fill'
 import Magnetic from '@/components/core/Magnetic'
 
