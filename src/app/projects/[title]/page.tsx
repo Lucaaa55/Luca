@@ -15,7 +15,9 @@ const text = localFont({
 
 export default function Page() {
     const router = useRouter()
-    const { title } = useParams()
+    const { title }: {
+        title: string
+    } = useParams<{ title: string }>()
     const item = list.find((project) => project.name.toLowerCase() === title)
     
     if (!item) {
@@ -26,7 +28,7 @@ export default function Page() {
         <main>
             <Section className={'h-screen w-screen p-10'}>
                 <div className={'items-center justify-center flex flex-1 flex-col gap-10'}>
-                    <h1 style={degular.style} className={'text-4xl md:text-5xl overflow-y-hidden'}>{title?.[0]?.toUpperCase().concat(title?.slice(1))}</h1>
+                    <h1 style={degular.style} className={'text-4xl md:text-5xl overflow-y-hidden'}>{title?.toUpperCase().concat(title?.slice(1))}</h1>
                     <video src={item.video} className={'h-2/3 object-cover'} controls autoPlay />
                 </div>
             </Section>
